@@ -1,0 +1,153 @@
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { LogOut, RefreshCw } from 'lucide-react';
+import { toast } from 'sonner';
+import StudentTasksTab from '@/components/student/StudentTasksTab';
+import StudentTopicsView from '@/components/student/StudentTopicsView';
+import StudentExamsView from '@/components/student/StudentExamsView';
+import StudentCalendarTab from '@/components/student/StudentCalendarTab';
+
+const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
+
+export default function StudentPanel() {
+  const [student, setStudent] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [refreshKey, setRefreshKey] = useState(0);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem('studentToken');
+    const studentId = localStorage.getItem('studentId');
+    if (!token || !studentId) {
+      navigate('/student');
+      return;
+    }
+    fetchStudent(studentId);
+  }, [refreshKey]);
+
+  const fetchStudent = async (studentId) => {
+    try {
+      const response = await axios.get(`${BACKEND_URL}/api/students/${studentId}`);
+      setStudent(response.data);
+    } catch (error) {
+      toast.error('Bilgiler yüklenemedi');
+      localStorage.removeItem('studentToken');
+      localStorage.removeItem('studentId');
+      navigate('/student');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('studentToken');
+    localStorage.removeItem('studentId');
+    navigate('/student');
+  };
+
+  const handleRefresh = () => {
+    setRefreshKey(prev => prev + 1);
+    toast.success('Veriler güncellendi');
+  };
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="loading-spinner"></div>
+      </div>
+    );
+  }
+
+  if (!student) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <Card className="p-8 text-center">
+          <p className="text-gray-600">Öğrenci bulunamadı</p>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen p-4 md:p-8">
+      <div className="max-w-7xl mx-auto page-fade-in">
+        {/* Header */}
+        <Card className="p-6 mb-6 gradient-card">
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            <div className="flex items-center gap-4">
+              <div className="w-16 h-16 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white font-bold text-2xl">
+                {student.ad.charAt(0)}{student.soyad?.charAt(0) || ''}
+              </div>
+              <div>
+                <h1 className="text-3xl font-bold text-gray-800">
+                  Hoş geldin, {student.ad}!
+                </h1>
+                <div className="flex gap-3 mt-2">
+                  <span className="px-3 py-1 bg-gradient-to-r from-amber-100 to-orange-100 text-amber-700 rounded-full text-sm font-semibold">
+                    {student.bolum}
+                  </span>
+                  {student.hedef && (
+                    <span className="px-3 py-1 bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-700 rounded-full text-sm font-semibold">
+                      🎯 Hedef: {student.hedef}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="flex gap-3">
+              <Button
+                variant="outline"
+                onClick={handleRefresh}
+                data-testid="refresh-button"
+                className="bg-white"
+              >
+                <RefreshCw className="w-4 h-4 mr-2" />
+                Yenile
+              </Button>
+              <Button
+                variant="outline"
+                onClick={handleLogout}
+                data-testid="student-logout-button"
+                className="bg-white"
+              >
+                <LogOut className="w-4 h-4 mr-2" />
+                Çıkış
+              </Button>
+            </div>
+          </div>
+        </Card>
+
+        {/* Tabs */}
+        <Tabs defaultValue="tasks" className="w-full">
+          <TabsList className="grid w-full grid-cols-4 mb-6">
+            <TabsTrigger value="tasks" data-testid="student-tasks-tab">Görevlerim</TabsTrigger>
+            <TabsTrigger value="topics" data-testid="student-topics-tab">Konular</TabsTrigger>
+            <TabsTrigger value="exams" data-testid="student-exams-tab">Denemeler</TabsTrigger>
+            <TabsTrigger value="calendar" data-testid="student-calendar-tab">Takvim</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="tasks">
+            <StudentTasksTab studentId={student.id} onRefresh={handleRefresh} />
+          </TabsContent>
+
+          <TabsContent value="topics">
+            <StudentTopicsView studentId={student.id} />
+          </TabsContent>
+
+          <TabsContent value="exams">
+            <StudentExamsView studentId={student.id} />
+          </TabsContent>
+
+          <TabsContent value="calendar">
+            <StudentCalendarTab studentId={student.id} onRefresh={handleRefresh} />
+          </TabsContent>
+        </Tabs>
+      </div>
+    </div>
+  );
+}
