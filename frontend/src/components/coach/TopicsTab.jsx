@@ -74,8 +74,10 @@ export default function TopicsTab({ studentId }) {
   };
 
   const groupedTopics = topics.reduce((acc, topic) => {
-    if (!acc[topic.ders]) acc[topic.ders] = [];
-    acc[topic.ders].push(topic);
+    const sinavKey = topic.sinav_turu || 'TYT';
+    if (!acc[sinavKey]) acc[sinavKey] = {};
+    if (!acc[sinavKey][topic.ders]) acc[sinavKey][topic.ders] = [];
+    acc[sinavKey][topic.ders].push(topic);
     return acc;
   }, {});
 
