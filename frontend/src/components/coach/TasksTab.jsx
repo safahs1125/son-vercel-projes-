@@ -18,7 +18,18 @@ export default function TasksTab({ studentId }) {
   const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedDay, setSelectedDay] = useState('Pazartesi');
-  const [newTask, setNewTask] = useState({ aciklama: '', sure: 0 });
+  const [newTasks, setNewTasks] = useState([
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+    { aciklama: '', sure: 0 },
+  ]);
 
   useEffect(() => {
     fetchTasks();
