@@ -239,7 +239,7 @@ export default function TaskPool({ studentId, onTaskAssigned }) {
       </div>
 
       <p className="text-xs text-gray-500 mt-4 text-center">
-        Görevleri sürükleyip günlere atayın
+        Haftalık görevler arasında sürükle-bırak özelliği mevcuttur
       </p>
     </Card>
   );
