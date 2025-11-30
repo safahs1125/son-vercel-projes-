@@ -156,7 +156,7 @@ export default function TaskPool({ studentId, onTaskAssigned }) {
             </DialogTrigger>
             <DialogContent className="max-w-4xl max-h-[85vh] overflow-y-auto">
               <DialogHeader>
-                <DialogTitle>Çoklu Görev Ekle (15'e kadar)</DialogTitle>
+                <DialogTitle>Çoklu Görev Ekle (15&apos;e kadar)</DialogTitle>
               </DialogHeader>
               <div className="space-y-3 mt-4">
                 <p className="text-sm text-gray-600">Boş bırakılan satırlar eklenmeyecek:</p>
