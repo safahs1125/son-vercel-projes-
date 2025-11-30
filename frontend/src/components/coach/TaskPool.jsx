@@ -13,7 +13,11 @@ export default function TaskPool({ studentId, onTaskAssigned }) {
   const [poolTasks, setPoolTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [openDialog, setOpenDialog] = useState(false);
+  const [openBulkDialog, setOpenBulkDialog] = useState(false);
   const [newTask, setNewTask] = useState({ aciklama: '', sure: 0 });
+  const [bulkTasks, setBulkTasks] = useState(
+    Array(15).fill().map(() => ({ aciklama: '', ders: '', konu: '', zorluk: '', sure: 0 }))
+  );
 
   useEffect(() => {
     fetchPoolTasks();
