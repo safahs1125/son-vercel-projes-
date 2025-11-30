@@ -132,6 +132,35 @@ export default function TopicsTab({ studentId }) {
             </DialogHeader>
             <div className="space-y-4 mt-4">
               <div>
+                <label className="block text-sm font-medium mb-2">Sınav Türü</label>
+                <Select value={newTopic.sinav_turu} onValueChange={(value) => setNewTopic({ ...newTopic, sinav_turu: value })}>
+                  <SelectTrigger data-testid="topic-sinav-turu-select">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="TYT">TYT</SelectItem>
+                    <SelectItem value="AYT">AYT</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              
+              {newTopic.sinav_turu === 'AYT' && (
+                <div>
+                  <label className="block text-sm font-medium mb-2">AYT Türü</label>
+                  <Select value={newTopic.ayt_type} onValueChange={(value) => setNewTopic({ ...newTopic, ayt_type: value })}>
+                    <SelectTrigger data-testid="topic-ayt-type-select">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="Sayısal AYT">Sayısal AYT</SelectItem>
+                      <SelectItem value="Eşit Ağırlık AYT">Eşit Ağırlık AYT</SelectItem>
+                      <SelectItem value="Sözel AYT">Sözel AYT</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              )}
+              
+              <div>
                 <label className="block text-sm font-medium mb-2">Ders</label>
                 <Input
                   value={newTopic.ders}
