@@ -54,6 +54,43 @@ export default function TaskPool({ studentId, onTaskAssigned }) {
     }
   };
 
+  const handleBulkAdd = async () => {
+    const validTasks = bulkTasks.filter(t => t.aciklama.trim() && t.sure > 0);
+    
+    if (validTasks.length === 0) {
+      toast.error('Lütfen en az bir görev girin');
+      return;
+    }
+
+    try {
+      const promises = validTasks.map(task => {
+        const taskDescription = task.ders && task.konu 
+          ? `${task.ders} - ${task.konu}${task.zorluk ? ' (' + task.zorluk + ')' : ''} - ${task.aciklama}`
+          : task.aciklama;
+
+        return axios.post(`${BACKEND_URL}/api/task-pool`, {
+          student_id: studentId,
+          aciklama: taskDescription,
+          sure: parseInt(task.sure)
+        });
+      });
+
+      await Promise.all(promises);
+      toast.success(`${validTasks.length} görev havuza eklendi`);
+      setOpenBulkDialog(false);
+      setBulkTasks(Array(15).fill().map(() => ({ aciklama: '', ders: '', konu: '', zorluk: '', sure: 0 })));
+      fetchPoolTasks();
+    } catch (error) {
+      toast.error('Görevler eklenemedi');
+    }
+  };
+
+  const updateBulkTask = (index, field, value) => {
+    const updated = [...bulkTasks];
+    updated[index][field] = value;
+    setBulkTasks(updated);
+  };
+
   const handleDeleteTask = async (taskId) => {
     if (!window.confirm('Bu görevi havuzdan silmek istediğinize emin misiniz?')) return;
     try {
