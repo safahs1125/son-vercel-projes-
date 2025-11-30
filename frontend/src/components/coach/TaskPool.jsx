@@ -217,15 +217,9 @@ export default function TaskPool({ studentId, onTaskAssigned }) {
           poolTasks.map((task) => (
             <div
               key={task.id}
-              className="p-3 bg-white rounded-lg shadow-sm border-l-4 border-amber-500 flex items-center justify-between cursor-move"
-              draggable
-              onDragStart={(e) => {
-                e.dataTransfer.setData('taskPoolId', task.id);
-                e.dataTransfer.setData('taskType', 'pool');
-              }}
+              className="p-3 bg-white rounded-lg shadow-sm border-l-4 border-amber-500 flex items-center justify-between"
             >
               <div className="flex items-center gap-2 flex-1">
-                <GripVertical className="w-4 h-4 text-gray-400 cursor-grab" />
                 <div className="flex-1">
                   <p className="text-sm font-medium text-gray-800">{task.aciklama}</p>
                   <p className="text-xs text-gray-500">{task.sure}dk</p>
