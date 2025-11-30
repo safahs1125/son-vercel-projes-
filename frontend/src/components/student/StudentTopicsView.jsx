@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from '@/components/ui/card';
-import { Progress } from '@/components/ui/progress';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { toast } from 'sonner';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
@@ -9,6 +9,7 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export default function StudentTopicsView({ studentId }) {
   const [topics, setTopics] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [expandedSections, setExpandedSections] = useState({});
 
   useEffect(() => {
     fetchTopics();
@@ -26,10 +27,16 @@ export default function StudentTopicsView({ studentId }) {
   };
 
   const groupedTopics = topics.reduce((acc, topic) => {
-    if (!acc[topic.ders]) acc[topic.ders] = [];
-    acc[topic.ders].push(topic);
+    const sinavKey = topic.sinav_turu || 'TYT';
+    if (!acc[sinavKey]) acc[sinavKey] = {};
+    if (!acc[sinavKey][topic.ders]) acc[sinavKey][topic.ders] = [];
+    acc[sinavKey][topic.ders].push(topic);
     return acc;
   }, {});
+
+  const toggleSection = (key) => {
+    setExpandedSections(prev => ({ ...prev, [key]: !prev[key] }));
+  };
 
   const getProgress = () => {
     if (topics.length === 0) return 0;
@@ -73,27 +80,58 @@ export default function StudentTopicsView({ studentId }) {
         </div>
       </Card>
 
-      {/* Topics by Subject */}
-      <div className="space-y-6">
-        {Object.entries(groupedTopics).map(([ders, dersTopics]) => (
-          <Card key={ders} className="p-6 gradient-card">
-            <h3 className="text-xl font-bold text-gray-800 mb-4 flex items-center">
-              <span className="w-2 h-8 bg-gradient-to-b from-amber-500 to-orange-600 rounded-full mr-3"></span>
-              {ders}
-            </h3>
+      {/* Topics by Exam Type and Subject - COLLAPSIBLE */}
+      <div className="space-y-8">
+        {Object.entries(groupedTopics).map(([sinavType, dersGroups]) => (
+          <div key={sinavType} className="space-y-4">
+            <h2 className="text-3xl font-bold text-gray-800 flex items-center">
+              <span className={`px-4 py-2 rounded-lg mr-3 ${sinavType === 'TYT' ? 'bg-gradient-to-r from-blue-500 to-cyan-600' : 'bg-gradient-to-r from-violet-500 to-purple-600'} text-white`}>
+                {sinavType}
+              </span>
+            </h2>
             <div className="space-y-3">
-              {dersTopics.map((topic) => (
-                <div
-                  key={topic.id}
-                  className="flex items-center justify-between p-4 bg-white rounded-lg shadow-sm"
-                  data-testid={`student-topic-item-${topic.id}`}
-                >
-                  <p className="font-medium text-gray-800">{topic.konu}</p>
-                  {getStatusBadge(topic.durum)}
-                </div>
-              ))}
+              {Object.entries(dersGroups).map(([ders, dersTopics]) => {
+                const sectionKey = `${sinavType}-${ders}`;
+                const isExpanded = expandedSections[sectionKey];
+                
+                return (
+                  <Card key={sectionKey} className="overflow-hidden gradient-card">
+                    <button
+                      onClick={() => toggleSection(sectionKey)}
+                      className="w-full p-4 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex items-center gap-3">
+                        {isExpanded ? (
+                          <ChevronDown className="w-5 h-5 text-gray-600" />
+                        ) : (
+                          <ChevronRight className="w-5 h-5 text-gray-600" />
+                        )}
+                        <h3 className="text-lg font-bold text-gray-800">{ders}</h3>
+                        <span className="text-sm text-gray-500">({dersTopics.length} konu)</span>
+                      </div>
+                      <div className="text-sm font-medium text-amber-600">
+                        {dersTopics.filter(t => t.durum === 'tamamlandi').length}/{dersTopics.length} tamamlandı
+                      </div>
+                    </button>
+                    
+                    {isExpanded && (
+                      <div className="p-4 pt-0 space-y-2 border-t">
+                        {dersTopics.map((topic) => (
+                          <div
+                            key={topic.id}
+                            className="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm"
+                          >
+                            <p className="font-medium text-gray-800">{topic.konu}</p>
+                            {getStatusBadge(topic.durum)}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </Card>
+                );
+              })}
             </div>
-          </Card>
+          </div>
         ))}
       </div>
 
