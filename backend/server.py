@@ -83,6 +83,30 @@ class CalendarNoteCreate(BaseModel):
 class CalendarNoteUpdate(BaseModel):
     note: str
 
+# New Models for Features
+class CoachCalendarEvent(BaseModel):
+    title: str
+    date: str
+    note: Optional[str] = None
+
+class CoachNote(BaseModel):
+    title: str
+    content: str
+
+class CoachNoteUpdate(BaseModel):
+    title: Optional[str] = None
+    content: Optional[str] = None
+
+class BookRecommendation(BaseModel):
+    name: str
+    level: str
+    description: Optional[str] = None
+
+class TaskPoolItem(BaseModel):
+    student_id: str
+    aciklama: str
+    sure: int
+
 # Coach Authentication
 @api_router.post("/coach/login", response_model=CoachLoginResponse)
 async def coach_login(login: CoachLogin):
