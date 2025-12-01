@@ -212,33 +212,52 @@ export default function TaskPool({ studentId, onTaskAssigned }) {
         </div>
       </div>
 
-      <div className="space-y-2">
-        {poolTasks.length === 0 ? (
-          <p className="text-sm text-gray-500 text-center py-8">Havuzda görev yok</p>
-        ) : (
-          poolTasks.map((task) => (
-            <div
-              key={task.id}
-              className="p-3 bg-white rounded-lg shadow-sm border-l-4 border-amber-500 flex items-center justify-between"
-            >
-              <div className="flex items-center gap-2 flex-1">
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">{task.aciklama}</p>
-                  <p className="text-xs text-gray-500">{task.sure}dk</p>
-                </div>
-              </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => handleDeleteTask(task.id)}
-                className="p-1"
-              >
-                <Trash2 className="w-4 h-4 text-red-500" />
-              </Button>
-            </div>
-          ))
+      <Droppable droppableId="task-pool" isDropDisabled={true}>
+        {(provided, snapshot) => (
+          <div 
+            ref={provided.innerRef} 
+            {...provided.droppableProps}
+            className={`space-y-2 min-h-[100px] ${snapshot.isDraggingOver ? 'bg-amber-50' : ''}`}
+          >
+            {poolTasks.length === 0 ? (
+              <p className="text-sm text-gray-500 text-center py-8">Havuzda görev yok</p>
+            ) : (
+              poolTasks.map((task, index) => (
+                <Draggable key={task.id} draggableId={task.id} index={index}>
+                  {(provided, snapshot) => (
+                    <div
+                      ref={provided.innerRef}
+                      {...provided.draggableProps}
+                      className={`p-3 bg-white rounded-lg shadow-sm border-l-4 border-amber-500 flex items-center justify-between ${
+                        snapshot.isDragging ? 'shadow-lg opacity-90' : ''
+                      }`}
+                    >
+                      <div className="flex items-center gap-2 flex-1">
+                        <div {...provided.dragHandleProps}>
+                          <GripVertical className="w-4 h-4 text-gray-400 cursor-grab" />
+                        </div>
+                        <div className="flex-1">
+                          <p className="text-sm font-medium text-gray-800">{task.aciklama}</p>
+                          <p className="text-xs text-gray-500">{task.sure}dk</p>
+                        </div>
+                      </div>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleDeleteTask(task.id)}
+                        className="p-1"
+                      >
+                        <Trash2 className="w-4 h-4 text-red-500" />
+                      </Button>
+                    </div>
+                  )}
+                </Draggable>
+              ))
+            )}
+            {provided.placeholder}
+          </div>
         )}
-      </div>
+      </Droppable>
 
       <p className="text-xs text-gray-500 mt-4 text-center">
         Haftalık görevler arasında sürükle-bırak özelliği mevcuttur
