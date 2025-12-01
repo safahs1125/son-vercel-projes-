@@ -260,7 +260,7 @@ export default function TaskPool({ studentId, onTaskAssigned }) {
       </Droppable>
 
       <p className="text-xs text-gray-500 mt-4 text-center">
-        Haftalık görevler arasında sürükle-bırak özelliği mevcuttur
+        💡 Görevleri sürükleyip haftalık günlere atayın
       </p>
     </Card>
   );
