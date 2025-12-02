@@ -19,6 +19,8 @@ export default function StudentPanel() {
   const [student, setStudent] = useState(null);
   const [loading, setLoading] = useState(true);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [showOnboarding, setShowOnboarding] = useState(false);
+  const [onboardingData, setOnboardingData] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
