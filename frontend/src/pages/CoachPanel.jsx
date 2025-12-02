@@ -10,6 +10,7 @@ import { toast } from 'sonner';
 import CoachCalendar from '@/components/coach/CoachCalendar';
 import CoachNotes from '@/components/coach/CoachNotes';
 import BookRecommendations from '@/components/coach/BookRecommendations';
+import StudentsAnalysisTab from '@/components/coach/StudentsAnalysisTab';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
