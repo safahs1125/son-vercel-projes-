@@ -903,20 +903,26 @@ async def get_all_students_analysis():
         "attention_needed": len([s for s in students_analysis if s["needs_attention"]])
     }
 
+class BulkNotification(BaseModel):
+    student_ids: List[str]
+    type: str
+    title: str
+    message: str
+
 @api_router.post("/coach/send-bulk-notification")
-async def send_bulk_notification(student_ids: List[str], notification: Notification):
+async def send_bulk_notification(data: BulkNotification):
     """
     Koç tarafından birden fazla öğrenciye bildirim gönderme
     """
     created_notifications = []
     
-    for student_id in student_ids:
+    for student_id in data.student_ids:
         record = {
             "id": str(uuid.uuid4()),
             "user_id": student_id,
-            "type": notification.type,
-            "title": notification.title,
-            "message": notification.message,
+            "type": data.type,
+            "title": data.title,
+            "message": data.message,
             "is_read": False,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
