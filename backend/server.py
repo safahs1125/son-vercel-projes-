@@ -789,6 +789,7 @@ async def get_daily_report(student_id: str, date: str):
         "most_studied_lesson": most_studied
     }
 
+app.include_router(api_router)
 
 app.add_middleware(
     CORSMiddleware,
