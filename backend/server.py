@@ -83,6 +83,50 @@ class CalendarNoteCreate(BaseModel):
 class CalendarNoteUpdate(BaseModel):
     note: str
 
+# ============================================
+# FAZ 1: ONBOARDING VE VERİ TOPLAMA MODELLERI
+# ============================================
+
+class StudentOnboarding(BaseModel):
+    sinif: str
+    hedef_siralama: int
+    gunluk_calisma_suresi: int
+    guclu_dersler: list
+    zayif_dersler: list
+    deneme_ortalamasi: float
+    kullanilan_kaynaklar: list
+    program_onceligi: str
+
+class SoruTakip(BaseModel):
+    student_id: str
+    date: str
+    lesson: str
+    topic: Optional[str] = None
+    source: Optional[str] = None
+    solved: int
+    correct: int
+    wrong: int
+    blank: int
+
+class SourceUpdate(BaseModel):
+    source_name: str
+    progress_percent: int
+
+class ExamDetailed(BaseModel):
+    student_id: str
+    tarih: str
+    exam_type: str
+    net_math: float
+    net_science: float
+    net_turkish: float
+    net_social: float
+
+class Notification(BaseModel):
+    user_id: str
+    type: str
+    title: str
+    message: str
+
 # New Models for Features
 class CoachCalendarEvent(BaseModel):
     title: str
