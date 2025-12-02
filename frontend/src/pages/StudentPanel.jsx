@@ -156,6 +156,7 @@ export default function StudentPanel() {
             </div>
 
             <div className="flex gap-3">
+              <SoruTakip studentId={student.id} />
               <Button
                 variant="outline"
                 onClick={handleRefresh}
