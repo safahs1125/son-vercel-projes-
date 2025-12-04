@@ -339,76 +339,94 @@ test_plan:
 frontend:
   - task: "Student Reports Tab - Weekly Report"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/student/StudentReports.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Faz 3 raporlama modülü test edilecek. Öğrenci panelinde haftalık rapor sekmesi - 4 özet kart, günlük çalışma line chart, ders bazında bar chart kontrol edilecek."
+      - working: true
+        agent: "testing"
+        comment: "✅ Haftalık rapor tamamen çalışıyor. 4 özet kart görüntüleniyor (Toplam Soru: 145, Başarı Oranı: %65.5, Trend: Yükseliş, En Çok: Matematik). Günlük çalışma performansı line chart ve ders bazında performans bar chart başarıyla render ediliyor."
         
   - task: "Student Reports Tab - Monthly Report"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/student/StudentReports.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Aylık rapor sekmesi test edilecek. 4 özet kart, haftalık ilerleme line chart, ders bazında aylık performans kartları kontrol edilecek."
+      - working: true
+        agent: "testing"
+        comment: "✅ Aylık rapor tamamen çalışıyor. 4 özet kart görüntüleniyor (Toplam Soru: 145, Başarı Oranı: %65.5, İlerleme: 0%, Dönem: Son 30 Gün). Haftalık ilerleme line chart ve ders bazında aylık performans kartları başarıyla görüntüleniyor."
         
   - task: "Coach Weekly Report Tab"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/frontend/src/components/coach/CoachWeeklyReport.jsx"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "Koç haftalık rapor sekmesi test edilecek. Dönem bilgisi, 4 özet kart, en çok gelişen öğrenciler, tüm öğrencilerin durumu kontrol edilecek."
+      - working: true
+        agent: "testing"
+        comment: "✅ Koç haftalık rapor tamamen çalışıyor. Dönem bilgisi kartı (27.11.2025 - 04.12.2025), 4 özet kart (Toplam Öğrenci: 3, Gelişen: 3, Sabit: 0, Gerileyen: 0), En Çok Gelişen Öğrenciler bölümü ve Tüm Öğrencilerin Durumu listesi (3 öğrenci) başarıyla görüntüleniyor."
 
 backend:
   - task: "Student Weekly Report API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "API endpoint /api/student/{id}/reports/weekly test edilecek. Response yapısı ve data doğruluğu kontrol edilecek."
+      - working: true
+        agent: "testing"
+        comment: "✅ API endpoint /api/student/{id}/reports/weekly çalışıyor. 200 OK response, doğru JSON yapısı: period, summary (total_solved, accuracy_rate, trend, most_studied_lesson), daily_breakdown (7 gün), lesson_breakdown array döndürüyor."
         
   - task: "Student Monthly Report API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "API endpoint /api/student/{id}/reports/monthly test edilecek. Response yapısı ve data doğruluğu kontrol edilecek."
+      - working: true
+        agent: "testing"
+        comment: "✅ API endpoint /api/student/{id}/reports/monthly çalışıyor. 200 OK response, doğru JSON yapısı: period, summary (total_solved, accuracy_rate, improvement_rate), weekly_breakdown (4 hafta), lesson_breakdown array döndürüyor."
         
   - task: "Coach Weekly Summary API"
     implemented: true
-    working: "NA"
+    working: true
     file: "/app/backend/server.py"
     stuck_count: 0
     priority: "high"
-    needs_retesting: true
+    needs_retesting: false
     status_history:
       - working: "NA"
         agent: "testing"
         comment: "API endpoint /api/coach/reports/weekly-summary test edilecek. Response yapısı ve data doğruluğu kontrol edilecek."
+      - working: true
+        agent: "testing"
+        comment: "✅ API endpoint /api/coach/reports/weekly-summary çalışıyor. 200 OK response, doğru JSON yapısı: period, summary (total_students: 3, students_improved: 3, students_declined: 0, students_stable: 0), most_improved, most_declined, all_students array döndürüyor."
 
 test_plan:
   current_focus:
