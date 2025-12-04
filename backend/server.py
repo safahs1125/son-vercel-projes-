@@ -1098,6 +1098,83 @@ async def send_bulk_notification(data: BulkNotification):
         "notifications": created_notifications
     }
 
+@api_router.get("/coach/reports/weekly-summary")
+async def get_coach_weekly_summary():
+    """
+    Koç için haftalık özet rapor - tüm öğrencilerin performansı
+    """
+    from datetime import date, timedelta
+    
+    today = date.today()
+    week_ago = today - timedelta(days=7)
+    
+    students = supabase.table("students").select("*").execute()
+    
+    students_summary = []
+    total_questions = 0
+    total_improved = 0
+    total_declined = 0
+    
+    for student in students.data:
+        # Öğrencinin haftalık verileri
+        soru_data = supabase.table("soru_takip").select("*").eq("student_id", student["id"]).gte("date", week_ago.isoformat()).execute()
+        
+        if not soru_data.data:
+            continue
+        
+        week_solved = sum(s["solved"] for s in soru_data.data)
+        week_correct = sum(s["correct"] for s in soru_data.data)
+        week_accuracy = round((week_correct / week_solved * 100), 1) if week_solved > 0 else 0
+        
+        # Önceki hafta ile karşılaştırma
+        two_weeks_ago = week_ago - timedelta(days=7)
+        prev_week_data = supabase.table("soru_takip").select("*").eq("student_id", student["id"]).gte("date", two_weeks_ago.isoformat()).lt("date", week_ago.isoformat()).execute()
+        
+        prev_week_solved = sum(s["solved"] for s in prev_week_data.data)
+        prev_week_correct = sum(s["correct"] for s in prev_week_data.data)
+        prev_accuracy = round((prev_week_correct / prev_week_solved * 100), 1) if prev_week_solved > 0 else 0
+        
+        change = week_accuracy - prev_accuracy
+        
+        if change > 5:
+            total_improved += 1
+            status = "improved"
+        elif change < -5:
+            total_declined += 1
+            status = "declined"
+        else:
+            status = "stable"
+        
+        students_summary.append({
+            "student_id": student["id"],
+            "student_name": f"{student['ad']} {student.get('soyad', '')}".strip(),
+            "questions_solved": week_solved,
+            "accuracy_rate": week_accuracy,
+            "change": change,
+            "status": status
+        })
+        
+        total_questions += week_solved
+    
+    # En çok gelişen ve gerileyen
+    students_summary.sort(key=lambda x: x["change"], reverse=True)
+    most_improved = students_summary[:3] if len(students_summary) >= 3 else students_summary
+    most_declined = students_summary[-3:] if len(students_summary) >= 3 else []
+    
+    return {
+        "period": f"{week_ago.strftime('%d.%m.%Y')} - {today.strftime('%d.%m.%Y')}",
+        "summary": {
+            "total_students": len(students_summary),
+            "total_questions_solved": total_questions,
+            "students_improved": total_improved,
+            "students_declined": total_declined,
+            "students_stable": len(students_summary) - total_improved - total_declined
+        },
+        "most_improved": most_improved,
+        "most_declined": most_declined,
+        "all_students": students_summary
+    }
+
 app.include_router(api_router)
 
 app.add_middleware(
