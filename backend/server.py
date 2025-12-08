@@ -1277,8 +1277,12 @@ async def manual_exam_entry(entry: ManualExamEntry):
         
         supabase.table("exam_analysis").insert(analysis_record).execute()
         
-        # Bildirim gönder
-        notification_record = {
+        # Öğrenci bilgisini al
+        student = supabase.table("students").select("*").eq("id", entry.student_id).execute()
+        student_name = f"{student.data[0]['ad']} {student.data[0].get('soyad', '')}".strip() if student.data else "Öğrenci"
+        
+        # Öğrenciye bildirim gönder
+        student_notification = {
             "id": str(uuid.uuid4()),
             "user_id": entry.student_id,
             "type": "success",
@@ -1287,7 +1291,19 @@ async def manual_exam_entry(entry: ManualExamEntry):
             "is_read": False,
             "created_at": datetime.now(timezone.utc).isoformat()
         }
-        supabase.table("notifications").insert(notification_record).execute()
+        supabase.table("notifications").insert(student_notification).execute()
+        
+        # Koça bildirim gönder (coach_id: "coach")
+        coach_notification = {
+            "id": str(uuid.uuid4()),
+            "user_id": "coach",
+            "type": "info",
+            "title": "Yeni Deneme Girişi",
+            "message": f"{student_name} yeni bir deneme girişi yaptı: {entry.exam_name} (Net: {calculation['total_net']})",
+            "is_read": False,
+            "created_at": datetime.now(timezone.utc).isoformat()
+        }
+        supabase.table("notifications").insert(coach_notification).execute()
         
         return {
             "success": True,
