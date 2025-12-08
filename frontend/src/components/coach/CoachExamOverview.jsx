@@ -187,9 +187,30 @@ export default function CoachExamOverview() {
               </div>
             )}
 
-            {/* Analiz durumu */}
+            {/* Analiz durumu ve Analiz butonu */}
             {upload.analysis_status === 'pending' && (
-              <p className="text-sm text-amber-600 mt-4">⏳ Analiz yapılıyor...</p>
+              <div className="mt-4 p-4 bg-amber-50 border-2 border-amber-300 rounded-lg">
+                <p className="text-sm text-amber-700 mb-3 font-semibold">
+                  ⏳ Bu deneme henüz analiz edilmedi
+                </p>
+                <Button
+                  onClick={() => triggerAnalysis(upload.id)}
+                  disabled={analyzingId === upload.id}
+                  className="w-full bg-gradient-to-r from-purple-500 to-pink-600"
+                >
+                  {analyzingId === upload.id ? (
+                    <>
+                      <Loader2 className="w-4 h-4 mr-2 animate-spin" />
+                      AI Analiz Ediliyor...
+                    </>
+                  ) : (
+                    <>
+                      <Sparkles className="w-4 h-4 mr-2" />
+                      AI Analiz Yap
+                    </>
+                  )}
+                </Button>
+              </div>
             )}
             {upload.analysis_status === 'failed' && (
               <p className="text-sm text-red-600 mt-4">❌ Analiz başarısız oldu</p>
