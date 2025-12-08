@@ -64,6 +64,11 @@ export default function CoachExamOverview() {
     );
   }
 
+  const openDetailModal = (exam) => {
+    setSelectedExam(exam);
+    setDetailModalOpen(true);
+  };
+
   return (
     <div className="space-y-4">
       <Card className="p-4 bg-gradient-to-r from-indigo-50 to-purple-50 border-2 border-indigo-300">
@@ -71,6 +76,7 @@ export default function CoachExamOverview() {
         <p className="text-sm text-gray-600">Tüm öğrencilerin yüklediği denemeler ve AI analizleri</p>
       </Card>
 
+      {/* Liste Görünümü */}
       {exams.map((exam, idx) => {
         const upload = exam.upload;
         const student = exam.student;
