@@ -279,6 +279,15 @@ export default function StudentsAnalysisTab() {
                       %{student.accuracy_rate}
                     </p>
                   </div>
+                  <Button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      openStudentDetail(student);
+                    }}
+                    className="bg-gradient-to-r from-blue-500 to-indigo-600"
+                  >
+                    Detay Gör
+                  </Button>
                   {student.last_activity && (
                     <div className="text-center">
                       <p className="text-sm text-gray-600">Son Aktivite</p>
