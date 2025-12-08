@@ -94,11 +94,12 @@ export default function CoachNotifications() {
           {notifications.map((notification) => (
             <Card
               key={notification.id}
-              className={`p-4 ${
+              className={`p-4 cursor-pointer transition-all hover:shadow-md ${
                 notification.is_read
                   ? 'bg-white border-gray-200'
                   : 'bg-blue-50 border-blue-300'
               }`}
+              onClick={() => !notification.is_read && markAsRead(notification.id)}
             >
               <div className="flex items-start justify-between">
                 <div className="flex-1">
@@ -117,7 +118,10 @@ export default function CoachNotifications() {
                   <Button
                     variant="ghost"
                     size="sm"
-                    onClick={() => markAsRead(notification.id)}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      markAsRead(notification.id);
+                    }}
                     title="Okundu olarak işaretle"
                   >
                     <Check className="w-4 h-4 text-green-600" />
