@@ -18,6 +18,7 @@ import StudentAnalysis from '@/components/student/StudentAnalysis';
 import StudentReports from '@/components/student/StudentReports';
 import ExamManualEntry from '@/components/student/ExamManualEntry';
 import ExamAnalysisView from '@/components/student/ExamAnalysisView';
+import TopicProgressManager from '@/components/student/TopicProgressManager';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
