@@ -40,6 +40,21 @@ CREATE TABLE IF NOT EXISTS topic_progress (
     UNIQUE(student_id, topic_id)
 );
 
+-- 4. Branş tarama testi tablosu
+CREATE TABLE IF NOT EXISTS brans_tarama (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    student_id UUID NOT NULL REFERENCES students(id) ON DELETE CASCADE,
+    date DATE NOT NULL,
+    lesson VARCHAR(100) NOT NULL,
+    correct INTEGER DEFAULT 0,
+    wrong INTEGER DEFAULT 0,
+    blank INTEGER DEFAULT 0,
+    total INTEGER DEFAULT 0,
+    net DECIMAL(10,2),
+    accuracy DECIMAL(5,2),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 -- İndeksler
 CREATE INDEX idx_exam_uploads_student ON exam_uploads(student_id);
 CREATE INDEX idx_exam_uploads_status ON exam_uploads(analysis_status);
@@ -47,6 +62,8 @@ CREATE INDEX idx_exam_analysis_student ON exam_analysis(student_id);
 CREATE INDEX idx_exam_analysis_upload ON exam_analysis(upload_id);
 CREATE INDEX idx_topic_progress_student ON topic_progress(student_id);
 CREATE INDEX idx_topic_progress_status ON topic_progress(status);
+CREATE INDEX idx_brans_tarama_student ON brans_tarama(student_id);
+CREATE INDEX idx_brans_tarama_date ON brans_tarama(date);
 
 -- RLS (Row Level Security) Policies
 ALTER TABLE exam_uploads ENABLE ROW LEVEL SECURITY;
