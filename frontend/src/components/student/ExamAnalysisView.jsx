@@ -61,18 +61,18 @@ export default function ExamAnalysisView({ studentId }) {
     return <div className="text-center text-gray-500">Yükleniyor...</div>;
   }
 
-  if (exams.length === 0) {
-    return (
-      <Card className="p-8 text-center gradient-card">
-        <FileText className="w-12 h-12 mx-auto mb-3 text-gray-400" />
-        <p className="text-gray-500">Henüz deneme yüklemediniz</p>
-      </Card>
-    );
-  }
+  const groupedOldExams = groupOldExamsByDate();
 
   return (
-    <div className="space-y-4">
-      {exams.map((exam, idx) => {
+    <div className="space-y-6">
+      {/* Manuel Deneme Giriş Formu */}
+      <ExamManualEntry studentId={studentId} onComplete={fetchExams} />
+
+      {/* Manuel Girişli Denemeler */}
+      {exams.length > 0 && (
+        <div className="space-y-4">
+          <h3 className="text-lg font-bold text-gray-800">Girilen Denemeler</h3>
+          {exams.map((exam, idx) => {
         const upload = exam.upload;
         const analysis = exam.analysis;
 
