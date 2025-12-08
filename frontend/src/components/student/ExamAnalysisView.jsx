@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from '@/components/ui/card';
-import { Award, TrendingUp, AlertCircle, FileText, Calendar } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Award, TrendingUp, AlertCircle, FileText, Calendar, Eye, X, Sparkles } from 'lucide-react';
+import { toast } from 'sonner';
+import ExamManualEntry from './ExamManualEntry';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 export default function ExamAnalysisView({ studentId }) {
   const [exams, setExams] = useState([]);
+  const [oldExams, setOldExams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedExam, setSelectedExam] = useState(null);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
 
   useEffect(() => {
     fetchExams();
@@ -15,13 +27,34 @@ export default function ExamAnalysisView({ studentId }) {
 
   const fetchExams = async () => {
     try {
-      const response = await axios.get(`${BACKEND_URL}/api/exam/student-exams/${studentId}`);
-      setExams(response.data);
+      // Manuel girişli denemeler
+      const manualResponse = await axios.get(`${BACKEND_URL}/api/exam/student-exams/${studentId}`);
+      setExams(manualResponse.data);
+      
+      // Eski denemeler
+      const oldResponse = await axios.get(`${BACKEND_URL}/api/exams/${studentId}`);
+      setOldExams(oldResponse.data);
     } catch (error) {
       console.error('Fetch error:', error);
+      toast.error('Denemeler yüklenemedi');
     } finally {
       setLoading(false);
     }
+  };
+
+  const groupOldExamsByDate = () => {
+    const grouped = {};
+    oldExams.forEach(exam => {
+      const key = `${exam.tarih}_${exam.sinav_tipi}`;
+      if (!grouped[key]) grouped[key] = { date: exam.tarih, type: exam.sinav_tipi, subjects: [] };
+      grouped[key].subjects.push(exam);
+    });
+    return Object.values(grouped);
+  };
+
+  const openDetailModal = (exam) => {
+    setSelectedExam(exam);
+    setDetailModalOpen(true);
   };
 
   if (loading) {
