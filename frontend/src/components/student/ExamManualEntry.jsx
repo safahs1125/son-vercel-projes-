@@ -125,7 +125,7 @@ export default function ExamManualEntry({ studentId, onComplete }) {
       <h3 className="text-xl font-bold text-gray-800 mb-4">Deneme Sonucu Gir</h3>
 
       {/* Temel Bilgiler */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 mb-6">
         <div>
           <label className="block text-sm font-semibold mb-2">Deneme Türü</label>
           <select
