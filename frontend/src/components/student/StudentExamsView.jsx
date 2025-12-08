@@ -41,6 +41,9 @@ export default function StudentExamsView({ studentId }) {
 
   return (
     <div className="space-y-6">
+      {/* Deneme Giriş Formu */}
+      <ExamManualEntry studentId={studentId} onComplete={fetchExams} />
+      
       {groupExamsByDate().length === 0 ? (
         <Card className="p-12 text-center gradient-card">
           <p className="text-gray-500">Henüz deneme eklenmemiş</p>
