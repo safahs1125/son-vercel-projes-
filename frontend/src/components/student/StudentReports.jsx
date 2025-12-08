@@ -243,6 +243,48 @@ export default function StudentReports({ studentId }) {
                 ))}
               </div>
             </Card>
+
+            {/* Konu Bazlı Detay */}
+            <Card className="p-6 gradient-card">
+              <h3 className="text-lg font-bold text-gray-800 mb-4">Konu Bazlı Çalışma Detayı</h3>
+              {topicDetails.length > 0 ? (
+                <div className="space-y-2">
+                  {topicDetails.map((detail) => (
+                    <div key={detail.id} className="p-3 bg-white rounded-lg border border-gray-200">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-semibold text-gray-800">{detail.lesson}</p>
+                          <p className="text-sm text-gray-600">Konu: {detail.topic || 'Genel'}</p>
+                          <p className="text-xs text-gray-500">{new Date(detail.date).toLocaleDateString('tr-TR')}</p>
+                        </div>
+                        <div className="flex gap-4 text-sm">
+                          <div className="text-center">
+                            <p className="text-xs text-gray-600">Çözülen</p>
+                            <p className="font-bold text-indigo-600">{detail.solved}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xs text-gray-600">Doğru</p>
+                            <p className="font-bold text-green-600">{detail.correct}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xs text-gray-600">Yanlış</p>
+                            <p className="font-bold text-red-600">{detail.wrong}</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-xs text-gray-600">Başarı</p>
+                            <p className="font-bold text-purple-600">
+                              %{((detail.correct / detail.solved) * 100).toFixed(1)}
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-center text-gray-500 py-4">Henüz soru çalışması yok</p>
+              )}
+            </Card>
           </div>
         )}
       </TabsContent>
