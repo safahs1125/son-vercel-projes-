@@ -271,9 +271,7 @@ async def delete_topic(topic_id: str):
 
 @api_router.post("/topics/init/{student_id}")
 async def init_topics(student_id: str, bolum: str):
-    """Initialize TYT and AYT topics for a student"""
-    topics = []
-    
+    """Initialize TYT and AYT topics for a student - BULK INSERT"""
     # Normalize bolum
     bolum_normalized = bolum.strip().lower()
     if 'sayisal' in bolum_normalized or 'sayısal' in bolum_normalized:
@@ -284,11 +282,12 @@ async def init_topics(student_id: str, bolum: str):
         bolum = "Sözel"
     
     order_index = 0
+    all_topics = []
     
-    # Add TYT Topics
+    # Prepare TYT Topics
     for ders_name, konu_list in TYT_TOPICS.items():
         for konu in konu_list:
-            data = {
+            all_topics.append({
                 "id": str(uuid.uuid4()),
                 "student_id": student_id,
                 "ders": f"TYT - {ders_name}",
@@ -296,12 +295,10 @@ async def init_topics(student_id: str, bolum: str):
                 "durum": "baslanmadi",
                 "sinav_turu": "TYT",
                 "order_index": order_index
-            }
-            response = supabase.table("topics").insert(data).execute()
-            topics.extend(response.data)
+            })
             order_index += 1
     
-    # Add AYT Topics
+    # Prepare AYT Topics
     ayt_topics_dict = {
         "Sayısal": AYT_SAYISAL,
         "Eşit Ağırlık": AYT_ESIT_AGIRLIK,
@@ -311,7 +308,7 @@ async def init_topics(student_id: str, bolum: str):
     if bolum in ayt_topics_dict:
         for ders_name, konu_list in ayt_topics_dict[bolum].items():
             for konu in konu_list:
-                data = {
+                all_topics.append({
                     "id": str(uuid.uuid4()),
                     "student_id": student_id,
                     "ders": f"AYT - {ders_name}",
@@ -319,12 +316,15 @@ async def init_topics(student_id: str, bolum: str):
                     "durum": "baslanmadi",
                     "sinav_turu": "AYT",
                     "order_index": order_index
-                }
-                response = supabase.table("topics").insert(data).execute()
-                topics.extend(response.data)
+                })
                 order_index += 1
     
-    return topics
+    # BULK INSERT - Tek seferde tüm konuları ekle
+    if all_topics:
+        response = supabase.table("topics").insert(all_topics).execute()
+        return response.data
+    
+    return []
 
 # Tasks
 @api_router.get("/tasks/{student_id}")
