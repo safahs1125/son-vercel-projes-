@@ -110,6 +110,10 @@ export default function CoachPanel() {
             <CoachWeeklyReport />
           </TabsContent>
 
+          <TabsContent value="notifications">
+            <CoachNotifications />
+          </TabsContent>
+
           <TabsContent value="calendar">
             <CoachCalendar />
           </TabsContent>
