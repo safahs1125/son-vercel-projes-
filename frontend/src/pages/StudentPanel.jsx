@@ -205,7 +205,7 @@ export default function StudentPanel() {
 
           <TabsContent value="exam-analysis">
             <div className="space-y-6">
-              <ExamUploader studentId={student.id} onUploadComplete={handleRefresh} />
+              <ExamManualEntry studentId={student.id} onComplete={handleRefresh} />
               <ExamAnalysisView studentId={student.id} />
             </div>
           </TabsContent>
