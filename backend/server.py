@@ -1186,6 +1186,7 @@ class ManualExamEntry(BaseModel):
     student_id: str
     exam_name: str
     exam_date: str
+    exam_type: str  # "TYT" veya "AYT"
     subjects: List[Dict]
 
 class TopicProgressUpdate(BaseModel):
@@ -1193,60 +1194,6 @@ class TopicProgressUpdate(BaseModel):
 
 # Analyzer instance
 exam_analyzer = ExamAnalyzer(api_key=os.environ.get('EMERGENT_LLM_KEY', ''))
-
-@api_router.post("/exam/upload-and-analyze")
-async def upload_and_analyze_exam(
-    student_id: str,
-    uploaded_by: str,
-    exam_name: str,
-    exam_date: str,
-    file: UploadFile = File(...)
-):
-    """
-    Deneme dosyasını yükle ve AI ile analiz et
-    """
-    try:
-        # Dosyayı geçici olarak kaydet
-        file_extension = file.filename.split('.')[-1].lower()
-        temp_filename = f"/tmp/{uuid.uuid4()}.{file_extension}"
-        
-        with open(temp_filename, "wb") as f:
-            content = await file.read()
-            f.write(content)
-        
-        # Dosya tipini belirle
-        file_type = "pdf" if file_extension == "pdf" else "image"
-        
-        # exam_uploads tablosuna kaydet
-        upload_record = {
-            "id": str(uuid.uuid4()),
-            "student_id": student_id,
-            "uploaded_by": uploaded_by,
-            "file_url": temp_filename,  # Production'da S3/Supabase storage kullanılmalı
-            "file_type": file_type,
-            "exam_date": exam_date,
-            "exam_name": exam_name,
-            "analysis_status": "pending",
-            "created_at": datetime.now(timezone.utc).isoformat()
-        }
-        
-        upload_response = supabase.table("exam_uploads").insert(upload_record).execute()
-        upload_id = upload_response.data[0]["id"]
-        
-        # AI analiz yap
-        analysis_result = await exam_analyzer.analyze_exam_document(temp_filename, file_type)
-        
-        if analysis_result["success"]:
-            analysis_data = analysis_result["analysis"]
-            
-            # Zayıf konuları tespit et
-            weak_topics = analysis_data.get("weak_topics", [])
-            
-            # Öneriler oluştur
-            recommendations = exam_analyzer.generate_recommendations(
-                weak_topics,
-                analysis_data.get("subjects", [])
-            )
             
             # exam_analysis tablosuna kaydet
             analysis_record = {
