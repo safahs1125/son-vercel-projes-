@@ -10,8 +10,10 @@ import { toast } from 'sonner';
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
 const DERSLER = [
-  'Türkçe', 'Matematik', 'Fizik', 'Kimya', 'Biyoloji',
-  'Tarih', 'Coğrafya', 'Edebiyat', 'Geometri', 'Felsefe'
+  'TYT Türkçe', 'TYT Matematik', 'TYT Fen Bilimleri', 'TYT Sosyal Bilimler',
+  'AYT Matematik', 'AYT Fizik', 'AYT Kimya', 'AYT Biyoloji',
+  'AYT Edebiyat', 'AYT Tarih-1', 'AYT Tarih-2', 'AYT Coğrafya-1', 'AYT Coğrafya-2',
+  'AYT Felsefe', 'AYT Din Kültürü'
 ];
 
 export default function SoruTakip({ studentId }) {
