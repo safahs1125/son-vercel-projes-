@@ -1,8 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Card } from '@/components/ui/card';
+import { Button } from '@/components/ui/button';
 import { toast } from 'sonner';
 import ExamManualEntry from './ExamManualEntry';
+import { Calendar, Award, Eye, X } from 'lucide-react';
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
@@ -10,6 +18,8 @@ export default function StudentExamsView({ studentId }) {
   const [exams, setExams] = useState([]);
   const [manualExams, setManualExams] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [selectedExam, setSelectedExam] = useState(null);
+  const [detailModalOpen, setDetailModalOpen] = useState(false);
 
   useEffect(() => {
     fetchExams();
