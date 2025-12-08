@@ -171,7 +171,7 @@ export default function StudentTopicsView({ studentId }) {
                             className="flex items-center justify-between p-3 bg-white rounded-lg shadow-sm"
                           >
                             <p className="font-medium text-gray-800">{topic.konu}</p>
-                            {getStatusBadge(topic.durum)}
+                            {getStatusBadge(topic)}
                           </div>
                         ))}
                       </div>
