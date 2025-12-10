@@ -386,6 +386,39 @@ export default function StudentTasksTab({ studentId, onRefresh }) {
       <div className="mt-8">
         <TaskHistory tasks={tasks} />
       </div>
+
+      {/* Görev Detay Modalı */}
+      <Dialog open={taskDetailModal} onOpenChange={setTaskDetailModal}>
+        <DialogContent className="max-w-lg">
+          <DialogHeader>
+            <DialogTitle>Görev Detayı</DialogTitle>
+          </DialogHeader>
+          {selectedTask && (
+            <div className="space-y-4 mt-4">
+              <Card className="p-4 bg-gradient-to-r from-amber-50 to-orange-50">
+                <p className="text-sm text-gray-600 mb-2">Görev Açıklaması:</p>
+                <p className="text-gray-800 whitespace-pre-wrap">{selectedTask.aciklama}</p>
+              </Card>
+              <div className="grid grid-cols-2 gap-4">
+                <Card className="p-4 bg-white">
+                  <p className="text-sm text-gray-600">Süre</p>
+                  <p className="text-xl font-bold text-indigo-600">{selectedTask.sure} dk</p>
+                </Card>
+                <Card className="p-4 bg-white">
+                  <p className="text-sm text-gray-600">Durum</p>
+                  <p className={`text-xl font-bold ${selectedTask.completed ? 'text-green-600' : 'text-orange-600'}`}>
+                    {selectedTask.completed ? '✓ Tamamlandı' : 'Bekliyor'}
+                  </p>
+                </Card>
+              </div>
+              <Card className="p-4 bg-gray-50">
+                <p className="text-sm text-gray-600">Gün</p>
+                <p className="text-gray-800 font-semibold">{selectedTask.gun}</p>
+              </Card>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
