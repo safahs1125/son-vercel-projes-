@@ -336,11 +336,30 @@ export default function StudentTasksTab({ studentId, onRefresh }) {
                         data-testid={`student-task-checkbox-${task.id}`}
                       />
                       <div className="flex-1 min-w-0 overflow-hidden">
-                        <p className={`text-sm break-words whitespace-normal overflow-wrap-anywhere ${task.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}>
-                          {task.aciklama}
+                        <p 
+                          className={`text-sm break-words whitespace-normal overflow-wrap-anywhere cursor-pointer ${task.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openTaskDetail(task);
+                          }}
+                        >
+                          {truncateText(task.aciklama)}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">{task.sure}dk</p>
                       </div>
+                      {task.aciklama.length > 40 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openTaskDetail(task);
+                          }}
+                          className="p-1"
+                        >
+                          <Eye className="w-3 h-3" />
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
                         size="sm"
