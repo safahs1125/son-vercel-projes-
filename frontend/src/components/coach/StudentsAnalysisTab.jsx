@@ -272,12 +272,23 @@ export default function StudentsAnalysisTab() {
                   </div>
                   <div className="text-center">
                     <p className="text-sm text-gray-600">Başarı Oranı</p>
-                    <p className={`text-xl font-bold ${
-                      student.accuracy_rate >= 80 ? 'text-green-600' :
-                      student.accuracy_rate >= 60 ? 'text-amber-600' : 'text-red-600'
-                    }`}>
-                      %{student.accuracy_rate}
-                    </p>
+                    <div className="flex flex-col items-center gap-1">
+                      <p className={`text-xl font-bold ${
+                        student.accuracy_rate >= 85 ? 'text-green-600' :
+                        student.accuracy_rate >= 60 ? 'text-amber-600' : 'text-red-600'
+                      }`}>
+                        %{student.accuracy_rate}
+                      </p>
+                      {student.accuracy_rate >= 85 ? (
+                        <span className="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded-full font-semibold">
+                          Başarılı
+                        </span>
+                      ) : student.accuracy_rate < 60 ? (
+                        <span className="px-2 py-0.5 bg-red-100 text-red-700 text-xs rounded-full font-semibold">
+                          Dikkat
+                        </span>
+                      ) : null}
+                    </div>
                   </div>
                   <Button
                     onClick={(e) => {
