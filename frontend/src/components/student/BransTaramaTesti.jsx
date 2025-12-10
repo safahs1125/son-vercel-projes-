@@ -12,7 +12,9 @@ const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 const BRANS_DERSLER = [
   'TYT Türkçe',
   'TYT Matematik',
-  'TYT Fen Bilimleri',
+  'TYT Fizik',
+  'TYT Kimya',
+  'TYT Biyoloji',
   'TYT Sosyal Bilimler',
   'AYT Matematik',
   'AYT Fizik',
