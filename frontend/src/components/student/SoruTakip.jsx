@@ -19,6 +19,7 @@ const DERSLER = [
 export default function SoruTakip({ studentId }) {
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState('');
   const [formData, setFormData] = useState({
     lesson: '',
     topic: '',
@@ -28,6 +29,10 @@ export default function SoruTakip({ studentId }) {
     wrong: '',
     blank: ''
   });
+
+  const filteredDersler = DERSLER.filter(ders =>
+    ders.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const handleSubmit = async () => {
     if (!formData.lesson || !formData.solved) {
