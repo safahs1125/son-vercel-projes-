@@ -132,7 +132,17 @@ export default function Notifications({ studentId }) {
                 })}
               </p>
             </div>
-            {notif.is_read && <CheckCheck className="w-5 h-5 text-gray-400" />}
+            <div className="flex items-center gap-2">
+              {notif.is_read && <CheckCheck className="w-5 h-5 text-gray-400" />}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={(e) => deleteNotification(notif.id, e)}
+                className="text-red-600 hover:text-red-700 hover:bg-red-100"
+              >
+                <Trash2 className="w-4 h-4" />
+              </Button>
+            </div>
           </div>
         </Card>
       ))}
