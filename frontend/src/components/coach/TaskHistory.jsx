@@ -96,7 +96,9 @@ export default function TaskHistory({ tasks }) {
                               task.completed ? 'bg-green-100 text-green-800' : 'bg-gray-200 text-gray-600'
                             }`}
                           >
-                            <p className={task.completed ? 'line-through' : ''}>{task.aciklama}</p>
+                            <p className={`break-words ${task.completed ? 'line-through' : ''}`}>
+                              {task.aciklama}
+                            </p>
                             <p className="text-[10px] mt-1">{task.sure}dk</p>
                           </div>
                         ))}
