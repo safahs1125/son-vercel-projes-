@@ -337,13 +337,14 @@ export default function StudentTasksTab({ studentId, onRefresh }) {
                       />
                       <div className="flex-1 min-w-0">
                         <p 
-                          className={`text-sm break-words cursor-pointer ${task.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}
+                          className={`text-sm truncate cursor-pointer ${task.completed ? 'line-through text-gray-500' : 'text-gray-800'}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             openTaskDetail(task);
                           }}
+                          title={task.aciklama}
                         >
-                          {truncateText(task.aciklama)}
+                          {task.aciklama}
                         </p>
                         <p className="text-xs text-gray-500 mt-1">{task.sure}dk</p>
                       </div>
