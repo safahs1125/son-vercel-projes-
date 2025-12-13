@@ -155,7 +155,7 @@ export default function StudentCalendarTab({ studentId, onRefresh }) {
               selectedDateNotes.map((note) => (
                 <div key={note.id} className="p-4 bg-white rounded-lg shadow-sm" data-testid={`student-calendar-note-${note.id}`}>
                   <div className="flex justify-between items-start">
-                    <p className="text-gray-800 flex-1">{note.note}</p>
+                    <p className="text-gray-800 flex-1 break-words">{note.note}</p>
                     <Button
                       variant="ghost"
                       size="sm"
