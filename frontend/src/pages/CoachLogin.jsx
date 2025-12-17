@@ -47,12 +47,25 @@ export default function CoachLogin() {
 
         <form onSubmit={handleLogin} className="space-y-4">
           <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Email adresinizi girin"
+              required
+              data-testid="coach-email-input"
+              className="w-full"
+            />
+          </div>
+          
+          <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Şifre</label>
             <Input
               type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Coach şifrenizi girin"
+              placeholder="Şifrenizi girin"
               required
               data-testid="coach-password-input"
               className="w-full"
