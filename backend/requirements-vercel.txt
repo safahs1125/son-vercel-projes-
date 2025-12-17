@@ -1,0 +1,23 @@
+# Vercel Deployment için optimize edilmiş requirements
+# Ana dependencies
+fastapi==0.110.1
+uvicorn==0.25.0
+python-dotenv==1.2.1
+bcrypt==4.1.3
+pydantic==2.12.4
+supabase==2.24.0
+
+# Supabase bağımlılıkları
+postgrest==2.24.0
+storage3==2.24.0
+realtime==2.24.0
+supabase-auth==2.24.0
+supabase-functions==2.24.0
+
+# HTTP ve networking
+httpx==0.28.1
+requests==2.32.5
+
+# Utility
+python-multipart==0.0.20
+python-dateutil==2.9.0.post0
