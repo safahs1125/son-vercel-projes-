@@ -155,16 +155,32 @@ class TaskPoolItem(BaseModel):
     aciklama: str
     sure: int
 
-# Coach password storage (in production, use proper database)
+# Coach credentials (in production, use proper database)
+COACH_EMAIL = os.environ.get('COACH_EMAIL', 'safa_boyaci15@erdogan.edu.tr')
 COACH_PASSWORD = os.environ.get('COACH_PASSWORD', 'coach2025')
+COACH_PASSWORD_HASH = os.environ.get('COACH_PASSWORD_HASH')
 
 # Coach Authentication
 @api_router.post("/coach/login", response_model=CoachLoginResponse)
 async def coach_login(login: CoachLogin):
-    global COACH_PASSWORD
-    if login.password == COACH_PASSWORD:
-        return CoachLoginResponse(success=True, token="coach-token-12345")
-    raise HTTPException(status_code=401, detail="Şifre hatalı")
+    # Check email
+    if login.email != COACH_EMAIL:
+        raise HTTPException(status_code=401, detail="Email veya şifre hatalı")
+    
+    # Check password - try hash first, fallback to plain text
+    password_valid = False
+    if COACH_PASSWORD_HASH:
+        try:
+            password_valid = bcrypt.checkpw(login.password.encode('utf-8'), COACH_PASSWORD_HASH.encode('utf-8'))
+        except:
+            password_valid = login.password == COACH_PASSWORD
+    else:
+        password_valid = login.password == COACH_PASSWORD
+    
+    if password_valid:
+        return CoachLoginResponse(success=True, token="coach-token-12345", email=COACH_EMAIL)
+    
+    raise HTTPException(status_code=401, detail="Email veya şifre hatalı")
 
 # Coach Change Password
 class ChangePassword(BaseModel):
