@@ -103,9 +103,10 @@ Vercel dashboard'da "Environment Variables" bölümüne gidin:
 1. SUPABASE_URL = https://blrlfmskgyfzjsvkgciu.supabase.co
 2. SUPABASE_ANON_KEY = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... (tam key)
 3. COACH_EMAIL = safa_boyaci15@erdogan.edu.tr
-4. COACH_PASSWORD_HASH = $2b$12$erzSRC6ZG12hEHmPzXkBXO... (tam hash)
-5. EMERGENT_LLM_KEY = sk-emergent-081991cF1Bf0c8a0d1
-6. REACT_APP_BACKEND_URL = https://[proje-adiniz].vercel.app
+4. COACH_PASSWORD = coach2025
+5. COACH_PASSWORD_HASH = $2b$12$erzSRC6ZG12hEHmPzXkBXO... (tam hash)
+6. EMERGENT_LLM_KEY = sk-emergent-081991cF1Bf0c8a0d1
+7. REACT_APP_BACKEND_URL = https://[proje-adiniz].vercel.app
 
 ⚠️ Her birini ayrı ayrı ekleyin: "Add" butonuna basın
 ⚠️ "Production", "Preview", "Development" seçeneklerinin hepsini işaretleyin
