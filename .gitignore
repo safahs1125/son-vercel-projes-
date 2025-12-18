@@ -125,3 +125,7 @@ test_reports/
 *.swp
 frontend/node_modules/.cache/default-development/2.pack
 frontend/node_modules/.cache/default-development/11.pack
+-e 
+# Environment files
+*.env
+*.env.*
